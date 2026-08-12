@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: tutor-site-db
+    environment:
+      POSTGRES_DB: tutorsite
+      POSTGRES_USER: tutor
+      POSTGRES_PASSWORD: tutor
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tutor -d tutorsite"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    container_name: tutor-site-backend
+    profiles: ["full"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: tutorsite
+      DB_USER: tutor
+      DB_PASSWORD: tutor
+      JWT_SECRET: ddddddddddddddddddddddddddddddddddddddddddddddd
+      CORS_ORIGINS: http://localhost:5173,http://localhost:3000
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./frontend
+    container_name: tutor-site-frontend
+    profiles: ["full"]
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+
+volumes:
+  pgdata:

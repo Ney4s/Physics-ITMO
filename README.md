@@ -71,20 +71,6 @@ docker compose --profile full up --build
 Роли три: гость, ученик и админ. Разграничение живёт и на бэке в Spring Security, и на фронте
 в защищённых маршрутах, так что чужой раздел не откроется ни через интерфейс, ни запросом напрямую
 
-## API
-
-Полное описание в Swagger UI на http://localhost:8080/swagger-ui.html. Коротко:
-
-- `POST /api/auth/login`, `POST /api/auth/register` - открыты всем, возвращают JWT
-- `GET /api/auth/me` - текущий юзер, нужен токен
-- `GET /api/tasks`, `/api/tasks/dictionaries`, `/api/pages/{slug}`, `/api/reviews` - публичные
-- `GET /api/cabinet`, `POST /api/cabinet/reviews` - только роль STUDENT
-- `/api/admin/**` - только роль ADMIN: CRUD учеников, задач и страниц, выгрузка
-  `GET /api/admin/students/export`, модерация `PATCH /api/admin/reviews/{id}/status`
-
-Токен передаётся заголовком `Authorization: Bearer <token>`, фронт хранит его в localStorage
-и подставляет сам
-
 ## Если что-то не работает
 
 Если вы тут случайно то не пишите мне, я не знаю как это исправить

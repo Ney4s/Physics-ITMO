@@ -29,8 +29,6 @@ public class DataInitializer implements CommandLineRunner {
 
     private final SitePageRepository pageRepository;
 
-    private final ReviewRepository reviewRepository;
-
     private final PasswordEncoder passwordEncoder;
 
     @Value("${app.admin.email}")
@@ -105,41 +103,6 @@ public class DataInitializer implements CommandLineRunner {
                 .student(student).task(t1)
                 .deadline(LocalDate.now().plusDays(7))
                 .status(AssignmentStatus.ASSIGNED)
-                .build());
-
-        User secondUser = userRepository.save(User.builder()
-                .email("petrova@tutorsite.local")
-                .password(passwordEncoder.encode("student"))
-                .fullName("Петрова Анна Сергеевна")
-                .role(Role.STUDENT)
-                .build());
-        StudentProfile secondStudent = studentRepository.save(StudentProfile.builder()
-                .user(secondUser).grade(11).subject(Subject.MATH)
-                .goals("Профильная математика, олимпиады")
-                .progressPercent(72)
-                .notes("Быстро считает, теряет баллы на оформлении")
-                .build());
-        assignmentRepository.save(Assignment.builder()
-                .student(secondStudent).task(t1)
-                .deadline(LocalDate.now().minusDays(2))
-                .status(AssignmentStatus.CHECKED)
-                .grade(9)
-                .comment("Верно, но не расписан переход к КПД")
-                .build());
-
-        // Один отзыв опубликован - он виден на сайте, второй ждёт модерации в админке
-        reviewRepository.save(Review.builder()
-                .author(secondUser)
-                .text("За полгода вытянули профильную математику с 60 до 88 баллов на пробнике. "
-                        + "Разборы задач видео очень выручают перед контрольными.")
-                .rating(5)
-                .status(ReviewStatus.PUBLISHED)
-                .build());
-        reviewRepository.save(Review.builder()
-                .author(studentUser)
-                .text("Отличные объяснения по механике, стало понятно наконец.")
-                .rating(5)
-                .status(ReviewStatus.PENDING)
                 .build());
     }
 

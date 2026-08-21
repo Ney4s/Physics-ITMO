@@ -1,204 +1,40 @@
-/* ==========================================================================
-   Дизайн-система сайта преподавателя физики и математики
-
-   Палитра по ТЗ, раздел 4: минимализм, светлые тона — голубой, белый,
-   бежевый/песочный. Характер задаётся не цветом, а материалом предмета:
-   тетрадная клетка как шкала отступов и плотность голубого как шкала сложности.
-   ========================================================================== */
-
 :root {
-  /* --- Цвет: голубой, белый, песочный --------------------------------- */
-  --white: #ffffff;      /* карточки, поля, шапка              */
-  --sand: #f6f1e7;       /* песочный: фон страницы             */
-  --sand-line: #e4dbc8;  /* песочная граница                   */
-  --sky: #57a5d8;        /* голубой: заливки, теги, прогресс   */
-  --sky-deep: #1d6a99;   /* голубой для текста и действий      */
-  --sky-wash: #eaf4fb;   /* светлая голубая подложка           */
-  --ink: #22303c;        /* текст                              */
-  --graphite: #6b7c8a;   /* подписи, вторичный текст           */
-
-  /* Семантика статусов: приглушены, чтобы не выпадать из светлой гаммы */
-  --ok: #3e8a6b;
-  --warn: #a8792c;
-  --alarm: #b4544a;
-  --ok-wash: #eaf3ef;
-  --warn-wash: #faf3e6;
-  --alarm-wash: #fbeeed;
-
-  --grid-line: rgba(34, 48, 60, 0.05);
-
-  /* Сложность — не радуга, а плотность одного голубого.
-     Шкала порядковая, поэтому и цвет должен читаться как порядок. */
-  --level-easy: #d8cdb4;
-  --level-medium: #57a5d8;
-  --level-hard: #1d6a99;
-  --level-olympiad: #0e3f5e;
-
-  /* --- Ритм ------------------------------------------------------------ */
-  --u: 8px;              /* базовая единица                    */
-  --cell: 24px;          /* клетка = 3u, шаг видимой сетки     */
-  --s-1: 8px;
-  --s-2: 16px;
-  --s-3: 24px;
-  --s-4: 32px;
-  --s-6: 48px;
-  --s-8: 64px;
-  --s-12: 96px;
-
-  --measure: 68ch;
-  --shell: 1120px;
-  --gutter: var(--s-3);
-
-  /* --- Форма ----------------------------------------------------------- */
-  --r: 3px;
-  --line: 1px solid var(--sand-line);
-  --line-sky: 1px solid #cfe2f1;
-
-  /* --- Шрифт ----------------------------------------------------------- */
-  --font-display: 'Unbounded', 'Golos Text', system-ui, sans-serif;
-  --font-body: 'Golos Text', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
-
-  --t-xs: 0.75rem;
-  --t-sm: 0.8125rem;
-  --t-base: 1rem;
-  --t-md: 1.125rem;
-  --t-lg: 1.375rem;
-  --t-xl: 1.625rem;
-  --t-2xl: clamp(1.75rem, 1.2rem + 2.4vw, 3rem);
-
-  --track-tight: -0.02em;
-  --track-label: 0.08em;
+  --blue: #4a90c2;
+  --blue-dark: #2f6b96;
+  --blue-light: #eaf3fa;
+  --sand: #f5efe4;
+  --sand-dark: #e8dcc4;
+  --text: #2c3e50;
+  --muted: #7a8a99;
+  --white: #ffffff;
+  --danger: #c0564a;
+  --ok: #4a9c6d;
+  --radius: 12px;
+  --shadow: 0 2px 10px rgba(44, 62, 80, 0.08);
 }
 
-/* ==========================================================================
-   Сброс и основа
-   ========================================================================== */
-
-*,
-*::before,
-*::after {
+* {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-html {
-  -webkit-text-size-adjust: 100%;
-}
-
-/* Подвал прижат к низу окна, пока содержимого не хватает на весь экран */
-#root {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  min-height: 100dvh; /* на мобильных не считаем высоту адресной строки */
-}
-
-main {
-  flex: 1 0 auto;
-}
-
 body {
-  font-family: var(--font-body);
-  font-size: var(--t-base);
+  font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+  color: var(--text);
+  background: var(--white);
   line-height: 1.6;
-  color: var(--ink);
-  background-color: var(--sand);
-  /* Видимая клетка и есть шкала отступов: вёрстка садится на её линии */
-  background-image:
-    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
-  background-size: var(--cell) var(--cell);
-  -webkit-font-smoothing: antialiased;
 }
-
-h1,
-h2,
-h3,
-h4 {
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: var(--track-tight);
-  text-wrap: balance;
-}
-
-/* Unbounded звучит только на первом экране — этого требует минимализм ТЗ */
-h1 {
-  font-family: var(--font-display);
-  font-size: var(--t-2xl);
-  font-weight: 700;
-  line-height: 1.15;
-}
-
-h2 {
-  font-size: var(--t-xl);
-}
-
-h3 {
-  font-size: var(--t-md);
-}
-
-p {
-  max-width: var(--measure);
-}
-
-a {
-  color: var(--sky-deep);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.18em;
-}
-
-a:hover {
-  color: var(--ink);
-}
-
-:focus-visible {
-  outline: 2px solid var(--sky-deep);
-  outline-offset: 2px;
-  border-radius: var(--r);
-}
-
-::selection {
-  background: var(--sky-wash);
-  color: var(--ink);
-}
-
-/* ==========================================================================
-   Раскладка
-   ========================================================================== */
 
 .container {
-  max-width: var(--shell);
+  max-width: 1080px;
   margin: 0 auto;
-  padding: 0 var(--gutter);
+  padding: 0 16px;
 }
-
-section {
-  padding: var(--s-6) 0;
-}
-
-.section-title {
-  font-size: var(--t-lg);
-  color: var(--ink);
-  margin-bottom: var(--s-3);
-  padding-bottom: var(--s-1);
-  border-bottom: 2px solid var(--sky);
-}
-
-.grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--s-4);
-}
-
-/* ==========================================================================
-   Шапка и навигация
-   ========================================================================== */
 
 .site-header {
   background: var(--white);
-  border-bottom: var(--line);
+  border-bottom: 1px solid var(--sand-dark);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -208,332 +44,202 @@ section {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--s-1) var(--s-3);
-  padding: var(--s-2) var(--gutter);
+  gap: 8px 18px;
+  padding: 12px 0;
 }
 
 .nav .logo {
-  font-family: var(--font-display);
   font-weight: 700;
-  font-size: var(--t-base);
-  letter-spacing: var(--track-tight);
-  color: var(--ink);
+  font-size: 1.15rem;
+  color: var(--blue-dark);
   text-decoration: none;
   margin-right: auto;
 }
 
-.nav .logo:hover {
-  color: var(--sky-deep);
-}
-
-/* Только пункты меню: логотип и кнопки живут по своим правилам.
-   Через :not() - иначе .nav a.active (0,2,1) перебивает цвет .btn (0,1,0)
-   и активная кнопка получает тёмный текст вместо белого. */
-.nav a:not(.logo):not(.btn) {
-  color: var(--graphite);
+.nav a {
+  color: var(--text);
   text-decoration: none;
-  font-size: var(--t-sm);
-  font-weight: 500;
-  padding-bottom: 2px;
-  border-bottom: 2px solid transparent;
+  font-size: 0.95rem;
 }
+.nav a:hover,
 
-.nav a:not(.logo):not(.btn):hover {
-  color: var(--ink);
+.nav a.active {
+  color: var(--blue);
 }
-
-.nav a:not(.logo):not(.btn).active {
-  color: var(--ink);
-  border-bottom-color: var(--sky);
-}
-
-/* ==========================================================================
-   Кнопки
-   ========================================================================== */
 
 .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--s-1);
-  border: 1px solid var(--sky-deep);
+  display: inline-block;
+  border: none;
   cursor: pointer;
-  background: var(--sky-deep);
+  background: var(--blue);
   color: var(--white);
   padding: 10px 20px;
-  border-radius: var(--r);
-  font-family: var(--font-body);
-  font-size: var(--t-sm);
-  font-weight: 500;
-  line-height: 1.2;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  font-family: inherit;
   text-decoration: none;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition: background 0.2s;
 }
 
 .btn:hover {
-  background: var(--ink);
-  border-color: var(--ink);
+  background: var(--blue-dark);
   color: var(--white);
 }
 
-.btn:active {
-  transform: translateY(1px);
-}
-
 .btn:disabled {
-  opacity: 0.45;
+  opacity: 0.6;
   cursor: not-allowed;
-  transform: none;
 }
 
 .btn-outline {
-  background: var(--white);
-  color: var(--sky-deep);
-  border-color: #b9d5e8;
+  background: transparent;
+  color: var(--blue);
+  border: 1px solid var(--blue);
 }
 
 .btn-outline:hover {
-  background: var(--sky-wash);
-  border-color: var(--sky-deep);
-  color: var(--sky-deep);
+  background: var(--blue-light);
+  color: var(--blue-dark);
 }
 
 .btn-danger {
-  background: var(--alarm);
-  border-color: var(--alarm);
+  background: var(--danger);
 }
 
 .btn-ok {
   background: var(--ok);
-  border-color: var(--ok);
 }
 
 .btn-sm {
-  padding: 6px 12px;
-  font-size: var(--t-xs);
+  padding: 5px 12px;
+  font-size: 0.85rem;
 }
 
-/* ==========================================================================
-   Герой
-   ========================================================================== */
-
 .hero {
-  background: var(--white);
-  border-bottom: var(--line);
-  padding: var(--s-12) 0 var(--s-8);
-  background-image:
-    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
-  background-size: var(--cell) var(--cell);
+  background: linear-gradient(135deg, var(--blue-light), var(--sand));
+  padding: 56px 0;
 }
 
 .hero h1 {
-  color: var(--ink);
-  max-width: 18ch;
-  margin-bottom: var(--s-3);
+  font-size: 2rem;
+  color: var(--blue-dark);
+  margin-bottom: 12px;
 }
 
 .hero p {
-  font-size: var(--t-md);
-  color: var(--graphite);
-  max-width: 58ch;
-  margin-bottom: var(--s-4);
-}
-
-.hero .btn + .btn {
-  margin-left: var(--s-1);
+  max-width: 640px;
+  margin-bottom: 20px;
 }
 
 .achievements {
   display: flex;
   flex-wrap: wrap;
-  gap: 0;
-  margin: var(--s-4) 0;
-  border-top: var(--line);
-  border-bottom: var(--line);
+  gap: 12px;
+  margin: 20px 0;
 }
 
-/* Достижения — не карточки с тенью, а строки приборной панели */
 .achievement {
-  flex: 1 1 220px;
-  padding: var(--s-2) var(--s-3);
-  font-size: var(--t-sm);
-  color: var(--graphite);
-  border-right: var(--line);
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 12px 18px;
+  font-size: 0.9rem;
 }
 
-.achievement:first-child {
-  padding-left: 0;
+section {
+  padding: 36px 0;
 }
 
-.achievement:last-child {
-  border-right: none;
+.section-title {
+  color: var(--blue-dark);
+  margin-bottom: 18px;
+  font-size: 1.4rem;
 }
-
-/* ==========================================================================
-   Фильтры и панели инструментов
-   ========================================================================== */
 
 .filters {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--s-2);
-  background: var(--white);
-  border: var(--line);
-  padding: var(--s-2);
-  border-radius: var(--r);
-  margin-bottom: var(--s-4);
+  gap: 12px;
+  background: var(--sand);
+  padding: 16px;
+  border-radius: var(--radius);
+  margin-bottom: 24px;
 }
 
 .filters select {
-  /* Справа место под свою стрелку, её рисует правило select ниже */
-  padding: 8px 36px 8px 12px;
-  border: var(--line);
-  border-radius: var(--r);
-  background-color: var(--white);
-  color: var(--ink);
+  padding: 8px 12px;
+  border: 1px solid var(--sand-dark);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--text);
   min-width: 150px;
   flex: 1;
-  font-family: var(--font-body);
-  font-size: var(--t-sm);
+  font-family: inherit;
 }
-
-.filters select:hover {
-  border-color: var(--sky);
-}
-
-.filters select:focus {
-  outline: none;
-  border-color: var(--sky-deep);
-  box-shadow: 0 0 0 3px var(--sky-wash);
-}
-
-.toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--s-1);
-  margin-bottom: var(--s-3);
-}
-
-/* ==========================================================================
-   Задачи
-   ========================================================================== */
 
 .task-feed {
   display: flex;
   flex-direction: column;
-  gap: var(--s-3);
+  gap: 20px;
 }
 
 .task-card {
   background: var(--white);
-  border: var(--line);
-  border-radius: var(--r);
-  padding: var(--s-3);
+  border: 1px solid var(--sand-dark);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
 }
 
 .task-card h3 {
-  color: var(--ink);
-  margin-bottom: var(--s-2);
+  color: var(--blue-dark);
+  margin-bottom: 8px;
 }
 
 .task-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--s-1);
-  margin-bottom: var(--s-2);
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
 .tag {
-  font-family: var(--font-mono);
-  font-size: var(--t-xs);
-  background: var(--sky-wash);
-  color: var(--sky-deep);
-  border: var(--line-sky);
-  border-radius: var(--r);
-  padding: 3px 10px;
+  background: var(--blue-light);
+  color: var(--blue-dark);
+  border-radius: 20px;
+  padding: 2px 12px;
+  font-size: 0.8rem;
 }
 
 .tag.sand {
   background: var(--sand);
-  color: var(--graphite);
-  border: var(--line);
+  color: var(--text);
 }
-
-/* Сложность: полоса слева кодирует уровень плотностью голубого */
-.tag-diff {
-  background: var(--white);
-  color: var(--ink);
-  border: var(--line);
-  border-left-width: 3px;
-  padding-left: 8px;
-}
-
-.tag-diff-easy {
-  border-left-color: var(--level-easy);
-}
-
-.tag-diff-medium {
-  border-left-color: var(--level-medium);
-}
-
-.tag-diff-hard {
-  border-left-color: var(--level-hard);
-}
-
-.tag-diff-olympiad {
-  border-left-color: var(--level-olympiad);
-}
-
-.task-date {
-  font-family: var(--font-mono);
-  color: var(--graphite);
-  font-size: var(--t-xs);
-  margin-top: var(--s-2);
-  padding-top: var(--s-1);
-  border-top: var(--line);
-}
-
-.solution summary {
-  cursor: pointer;
-  color: var(--sky-deep);
-  font-size: var(--t-sm);
-  font-weight: 500;
-  padding: var(--s-1) 0;
-}
-
-.solution > div {
-  padding: var(--s-1) 0 0;
-}
-
-/* ==========================================================================
-   Формулы
-   ========================================================================== */
 
 .latex {
   overflow-x: auto;
 }
 
-/* KaTeX по умолчанию 1.21em — строчная формула вылезает из ритма строки */
-.latex .katex {
-  font-size: 1.08em;
+.task-date {
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-top: 10px;
 }
 
-/* Выключная формула — отдельный блок с отбивкой, а не строка текста */
-.latex .katex-display {
-  margin: var(--s-2) 0;
-  padding: var(--s-2) 0 var(--s-2) var(--s-2);
-  border-left: 2px solid var(--sky);
-  overflow-x: auto;
-  overflow-y: hidden;
+.solution summary {
+  cursor: pointer;
+  color: var(--blue);
+}
+
+.solution > div {
+  padding: 10px 0;
 }
 
 .video-wrap {
   position: relative;
   padding-top: 56.25%;
-  margin-top: var(--s-2);
-  border: var(--line);
-  border-radius: var(--r);
+  margin-top: 12px;
+  border-radius: var(--radius);
   overflow: hidden;
 }
 
@@ -545,15 +251,8 @@ section {
   border: 0;
 }
 
-/* ==========================================================================
-   Таблицы
-   ========================================================================== */
-
 .table-wrap {
   overflow-x: auto;
-  border: var(--line);
-  border-radius: var(--r);
-  background: var(--white);
 }
 
 table.data {
@@ -561,44 +260,32 @@ table.data {
   border-collapse: collapse;
   background: var(--white);
 }
-
 table.data th,
+
 table.data td {
-  padding: 10px var(--s-2);
-  border-bottom: var(--line);
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--sand-dark);
   text-align: left;
-  font-size: var(--t-sm);
+  font-size: 0.92rem;
 }
 
 table.data th {
-  font-family: var(--font-mono);
-  font-size: var(--t-xs);
-  text-transform: uppercase;
-  letter-spacing: var(--track-label);
-  color: var(--graphite);
-  background: var(--sand);
+  background: var(--blue-light);
+  color: var(--blue-dark);
   white-space: nowrap;
-  font-weight: 500;
 }
 
-table.data tr:last-child td {
-  border-bottom: none;
+table.data tr:hover td {
+  background: var(--sand);
 }
-
-table.data tbody tr:hover td {
-  background: var(--sky-wash);
-}
-
-/* ==========================================================================
-   Формы
-   ========================================================================== */
 
 .form-card {
   max-width: 560px;
   background: var(--white);
-  border: var(--line);
-  border-radius: var(--r);
-  padding: var(--s-4);
+  border: 1px solid var(--sand-dark);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
   margin: 0 auto;
 }
 
@@ -607,148 +294,123 @@ table.data tbody tr:hover td {
 }
 
 .form-group {
-  margin-bottom: var(--s-2);
+  margin-bottom: 14px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 6px;
-  font-family: var(--font-mono);
-  font-size: var(--t-xs);
-  text-transform: uppercase;
-  letter-spacing: var(--track-label);
-  color: var(--graphite);
+  margin-bottom: 4px;
+  font-size: 0.9rem;
+  color: var(--muted);
 }
-
 .form-group input,
 .form-group select,
+
 .form-group textarea {
   width: 100%;
-  padding: 10px 12px;
-  border: var(--line);
-  border-radius: var(--r);
-  font-size: var(--t-sm);
-  font-family: var(--font-body);
-  color: var(--ink);
-  background-color: var(--white);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-/* Место под свою стрелку: сокращённый padding выше задаёт все четыре стороны */
-.form-group select {
-  padding-right: 36px;
-}
-
-.form-group input:hover,
-.form-group select:hover,
-.form-group textarea:hover {
-  border-color: var(--sky);
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: var(--sky-deep);
-  box-shadow: 0 0 0 3px var(--sky-wash);
+  padding: 9px 12px;
+  border: 1px solid var(--sand-dark);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: var(--white);
 }
 
 .form-group textarea {
-  min-height: 120px;
+  min-height: 100px;
   resize: vertical;
 }
 
 .form-actions {
   display: flex;
-  gap: var(--s-1);
+  gap: 10px;
   flex-wrap: wrap;
-  margin-top: var(--s-3);
 }
-
-/* ==========================================================================
-   Выпадающие списки
-
-   appearance: none снимает системный вид, дальше рисуем свою стрелку фоном.
-   Отступ справа под неё задан в .filters select и .form-group select: там
-   padding записан сокращённо, и отсюда его не перебить по специфичности.
-   Цвета в data-URI приходится писать числом - переменные внутри url() не живут.
-   ========================================================================== */
-
-select {
-  appearance: none;
-  -webkit-appearance: none;
-  cursor: pointer;
-  /* #6b7c8a - это --graphite */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%236b7c8a' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right var(--s-2) center;
-  background-size: 12px 8px;
-  padding-right: 36px;
-}
-
-select:hover,
-select:focus {
-  /* #1d6a99 - это --sky-deep */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%231d6a99' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-}
-
-select:disabled {
-  cursor: not-allowed;
-  opacity: 0.55;
-}
-
-/* Раскрытый список рисует система. Здесь браузеры расходятся: Windows и Linux
-   эти цвета применяют, macOS оставляет свою отрисовку. */
-option {
-  color: var(--ink);
-  background-color: var(--white);
-}
-
-/* ==========================================================================
-   Обратная связь
-   ========================================================================== */
 
 .error {
-  color: var(--alarm);
-  font-size: var(--t-sm);
+  color: var(--danger);
+  font-size: 0.85rem;
 }
 
 .alert {
-  padding: var(--s-2);
-  border-radius: var(--r);
-  border-left: 3px solid transparent;
-  margin-bottom: var(--s-2);
-  font-size: var(--t-sm);
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  margin-bottom: 16px;
 }
 
 .alert-ok {
-  background: var(--ok-wash);
-  border-left-color: var(--ok);
+  background: #e7f4ec;
   color: var(--ok);
 }
 
 .alert-err {
-  background: var(--alarm-wash);
-  border-left-color: var(--alarm);
-  color: var(--alarm);
+  background: #f9e9e7;
+  color: var(--danger);
 }
 
 .progress-bar {
-  background: var(--sand-line);
-  border-radius: var(--r);
-  height: 6px;
+  background: var(--sand);
+  border-radius: 20px;
+  height: 18px;
   overflow: hidden;
   min-width: 90px;
 }
 
 .progress-bar > div {
-  background: var(--sky-deep);
+  background: var(--blue);
   height: 100%;
-  transition: width 0.4s ease;
+  border-radius: 20px;
+  transition: width 0.4s;
+}
+
+.review-card {
+  background: var(--sand);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-bottom: 14px;
+}
+
+.review-card .stars {
+  color: #d9a441;
+}
+
+.review-card .author {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 6px;
+}
+
+.admin-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.admin-nav a {
+  padding: 8px 16px;
+  border-radius: 20px;
+  text-decoration: none;
+  background: var(--sand);
+  color: var(--text);
+  font-size: 0.9rem;
+}
+.admin-nav a.active,
+
+.admin-nav a:hover {
+  background: var(--blue);
+  color: var(--white);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
 }
 
 .status-PENDING {
-  color: var(--warn);
+  color: #b58b2a;
 }
 
 .status-PUBLISHED {
@@ -756,307 +418,68 @@ option {
 }
 
 .status-REJECTED {
-  color: var(--alarm);
-}
-
-/* ==========================================================================
-   Отзывы
-   ========================================================================== */
-
-.review-card {
-  background: var(--white);
-  border: var(--line);
-  border-left: 3px solid var(--sky);
-  border-radius: var(--r);
-  padding: var(--s-3);
-  margin-bottom: var(--s-2);
-}
-
-.review-card .stars {
-  color: var(--warn);
-  letter-spacing: 0.1em;
-}
-
-.review-card .author {
-  font-family: var(--font-mono);
-  color: var(--graphite);
-  font-size: var(--t-xs);
-  margin-top: var(--s-1);
-}
-
-/* ==========================================================================
-   Админка
-   ========================================================================== */
-
-.admin-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0;
-  margin-bottom: var(--s-4);
-  border-bottom: var(--line);
-}
-
-.admin-nav a {
-  padding: 10px var(--s-2);
-  text-decoration: none;
-  background: transparent;
-  color: var(--graphite);
-  font-size: var(--t-sm);
-  font-weight: 500;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-}
-
-.admin-nav a:hover {
-  color: var(--ink);
-}
-
-.admin-nav a.active {
-  color: var(--ink);
-  border-bottom-color: var(--sky);
+  color: var(--danger);
 }
 
 .editor-toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
-  margin-bottom: var(--s-1);
+  gap: 6px;
+  margin-bottom: 8px;
 }
 
 .editor-toolbar button {
   padding: 5px 10px;
-  border: var(--line);
+  border: 1px solid var(--sand-dark);
   background: var(--white);
-  color: var(--ink);
-  border-radius: var(--r);
+  border-radius: 6px;
   cursor: pointer;
-  font-family: var(--font-mono);
-  font-size: var(--t-xs);
+  font-family: inherit;
 }
 
 .editor-toolbar button:hover {
-  background: var(--sky-wash);
-  border-color: var(--sky);
-  color: var(--sky-deep);
-}
-
-/* Идёт после :hover при равной специфичности - активный формат важнее наведения */
-.editor-toolbar button.is-active,
-.editor-toolbar button.is-active:hover {
-  background: var(--sky-deep);
-  border-color: var(--sky-deep);
-  color: var(--white);
+  background: var(--blue-light);
 }
 
 .editor-area {
   min-height: 240px;
-  max-height: 70vh;
-  overflow: auto;
-  resize: vertical;
-  border: var(--line);
-  border-radius: var(--r);
-  padding: var(--s-2);
+  border: 1px solid var(--sand-dark);
+  border-radius: 8px;
+  padding: 12px;
   background: var(--white);
   outline: none;
 }
 
-.editor-area:focus {
-  border-color: var(--sky-deep);
-  box-shadow: 0 0 0 3px var(--sky-wash);
-}
-
-/* ==========================================================================
-   Содержимое из визуального редактора
-
-   Один набор правил на редактор и на публичную страницу: WYSIWYG обязан
-   показывать то же, что увидит посетитель.
-   ========================================================================== */
-
-.editor-area,
-.page-content {
-  /* Длинные адреса и слова без пробелов иначе распирают бокс по горизонтали */
-  overflow-wrap: anywhere;
-}
-
-.editor-area > * + *,
-.page-content > * + * {
-  margin-top: var(--s-2);
-}
-
-.editor-area h2,
-.page-content h2 {
-  font-size: var(--t-lg);
-}
-
-.editor-area h3,
-.page-content h3 {
-  font-size: var(--t-md);
-}
-
-/* Глобальный сброс обнуляет padding списков, и маркеры при list-style-position:
-   outside рисуются снаружи бокса. Отступ нужно вернуть явно. */
-.editor-area ul,
-.editor-area ol,
-.page-content ul,
-.page-content ol {
-  padding-left: 1.5em;
-}
-
-.editor-area li + li,
-.page-content li + li {
-  margin-top: 4px;
-}
-
-.editor-area img,
-.page-content img {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Широкая таблица прокручивается внутри себя, а не растягивает страницу */
-.editor-area table,
-.page-content table {
-  display: block;
-  max-width: 100%;
-  overflow-x: auto;
-}
-
-.editor-area pre,
-.page-content pre {
-  overflow-x: auto;
-  padding: var(--s-2);
-  background: var(--sand);
-  border-radius: var(--r);
-  font-family: var(--font-mono);
-  font-size: var(--t-sm);
-}
-
-.editor-area blockquote,
-.page-content blockquote {
-  padding-left: var(--s-2);
-  border-left: 3px solid var(--sky);
-  color: var(--graphite);
-}
-
-/* ==========================================================================
-   Подвал
-   ========================================================================== */
-
 .site-footer {
-  background: var(--white);
-  border-top: var(--line);
-  margin-top: var(--s-8);
-  padding: var(--s-4) 0;
-  color: var(--graphite);
-  font-size: var(--t-sm);
+  background: var(--sand);
+  margin-top: 40px;
+  padding: 24px 0;
+  color: var(--muted);
+  font-size: 0.9rem;
 }
-
-/* ==========================================================================
-   Утилиты
-   ========================================================================== */
 
 .muted {
-  color: var(--graphite);
+  color: var(--muted);
 }
 
 .center {
   text-align: center;
 }
 
-/* ==========================================================================
-   Адаптив: ТЗ требует корректной работы от 320px
-   ========================================================================== */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
 
-@media (max-width: 860px) {
+@media (max-width: 720px) {
   .grid-2 {
     grid-template-columns: 1fr;
-    gap: var(--s-3);
   }
-
-  section {
-    padding: var(--s-4) 0;
-  }
-
-  .hero {
-    padding: var(--s-6) 0 var(--s-4);
-  }
-
   .hero h1 {
-    max-width: none;
+    font-size: 1.5rem;
   }
-
-  .achievement {
-    flex-basis: 100%;
-    border-right: none;
-    border-bottom: var(--line);
-  }
-
-  .achievement:first-child {
-    padding-left: var(--s-3);
-  }
-
-  .achievement:last-child {
-    border-bottom: none;
-  }
-}
-
-@media (max-width: 560px) {
-  :root {
-    --gutter: var(--s-2);
-  }
-
-  .nav {
-    gap: var(--s-1) var(--s-2);
-  }
-
-  .filters {
-    flex-direction: column;
-  }
-
   .filters select {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .form-card {
-    padding: var(--s-3);
-  }
-
-  .task-card {
-    padding: var(--s-2);
-  }
-
-  .achievement {
-    padding-left: var(--s-2);
-    padding-right: var(--s-2);
-  }
-
-  .achievement:first-child {
-    padding-left: var(--s-2);
-  }
-
-  /* Кнопки в узкой колонке тянутся на всю ширину, а не рвут строку */
-  .form-actions .btn,
-  .hero .btn {
-    flex: 1 1 auto;
-  }
-
-  .hero .btn + .btn {
-    margin-left: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-
-  .btn:active {
-    transform: none;
+    min-width: 120px;
   }
 }

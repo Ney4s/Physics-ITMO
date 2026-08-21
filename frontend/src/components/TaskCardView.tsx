@@ -8,8 +8,8 @@ export function TaskCardView({ task }: { task: TaskCard }) {
 
       <div className="task-meta">
         <span className="tag">{task.subject}</span>
-        <span className="tag">{task.grade} класс</span>
-        <span className="tag">{task.difficulty}</span>
+        <span className="tag sand">{task.grade} класс</span>
+        <span className={`tag tag-diff tag-diff-${task.difficultyCode.toLowerCase()}`}>{task.difficulty}</span>
         {task.topics.map((topic) => (
           <span key={topic} className="tag sand">
             {topic}

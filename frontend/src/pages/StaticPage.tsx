@@ -22,7 +22,7 @@ export function StaticPage({ slug }: { slug: string }) {
         {page && (
           <>
             <h2 className="section-title">{page.title}</h2>
-            <div dangerouslySetInnerHTML={{ __html: page.htmlContent }} />
+            <div className="page-content" dangerouslySetInnerHTML={{ __html: page.htmlContent }} />
           </>
         )}
         {!page && !error && <p className="muted">Загрузка...</p>}
